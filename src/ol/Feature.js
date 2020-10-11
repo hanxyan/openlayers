@@ -1,4 +1,10 @@
 /**
+ * 在一个Feature上存储多个geometry，然后通过setGeometryName()设置要获取的某个geometry
+ * 在一个Feature上存储多个geometry（比如某一Feature可绑定一个Polygon、一个用来代表location的图标
+ * 的Point）,这相比于：<在一个图层中分别存放一组Polygon的Feature和一组Point的Feature> 的做法要好得多
+ * */ 
+
+/**
  * @module ol/Feature
  */
 import BaseObject, {getChangeEventType} from './Object.js';
@@ -106,6 +112,7 @@ class Feature extends BaseObject {
     );
 
     if (opt_geometryOrProperties) {
+      // 判断传入的参数是否是一个Geometry对象
       if (
         typeof (
           /** @type {?} */ (opt_geometryOrProperties).getSimplifiedGeometry

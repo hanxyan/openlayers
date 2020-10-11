@@ -1,3 +1,7 @@
+/**
+ * 高亮feature元素的使用示例
+ * */ 
+
 import GeoJSON from '../src/ol/format/GeoJSON.js';
 import Map from '../src/ol/Map.js';
 import VectorLayer from '../src/ol/layer/Vector.js';
@@ -65,15 +69,18 @@ const highlightStyle = new Style({
   }),
 });
 
+// 在这里新建了一个高亮图层，如果存在多个图层需要确保高亮图层位于其他图层的上方
 const featureOverlay = new VectorLayer({
   source: new VectorSource(),
-  map: map,
+  map: map,//在这里绑定了地图，也可以在外面用map.addLayer(featureOverlay)
   style: function (feature) {
+    // 在这里动态地修改highlightStyle中Text中会显示的文字
     highlightStyle.getText().setText(feature.get('name'));
     return highlightStyle;
   },
 });
 
+// 当前位于高亮图层的元素
 let highlight;
 const displayFeatureInfo = function (pixel) {
   const feature = map.forEachFeatureAtPixel(pixel, function (feature) {
@@ -87,10 +94,13 @@ const displayFeatureInfo = function (pixel) {
     info.innerHTML = '&nbsp;';
   }
 
+  // 将当前获取到的元素与原高亮元素对比
   if (feature !== highlight) {
+    // 如果高亮图层存在高亮元素，那么需要清除原来高亮显示的元素
     if (highlight) {
       featureOverlay.getSource().removeFeature(highlight);
     }
+    // 如果该pixel存在feature，将其复制一份到高亮图层进行显示
     if (feature) {
       featureOverlay.getSource().addFeature(feature);
     }
@@ -99,6 +109,7 @@ const displayFeatureInfo = function (pixel) {
 };
 
 map.on('pointermove', function (evt) {
+  // 如果鼠标移动伴随着地图的拖拽行为，那么不要进行高亮
   if (evt.dragging) {
     return;
   }

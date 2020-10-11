@@ -1,4 +1,8 @@
 /**
+ * 自定义Feature参考，比如地块、轨迹和标注的Feature
+ * */ 
+
+/**
  * @module ol/format/Polyline
  */
 import Feature from '../Feature.js';
